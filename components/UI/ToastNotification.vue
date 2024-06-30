@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {ref, defineProps, defineEmits} from 'vue';
+import {ref, defineProps, watch} from 'vue';
 
 const props = defineProps({
   message: String
@@ -8,6 +8,7 @@ const props = defineProps({
 const visible = ref(false);
 
 const show = () => {
+  alert(2)
   visible.value = true;
   setTimeout(() => {
     visible.value = false;
@@ -20,13 +21,15 @@ watch(() => props.message, show);
 
 <template>
   <transition name="fade">
-    <div v-if="visible" class="toast">{{ message }}</div>
+    <div v-if="visible" class="toast">
+      {{ message }}
+    </div>
   </transition>
 </template>
 
 <style scoped lang="less">
 .toast {
-  position: fixed;
+  position: absolute;
   bottom: 20px;
   left: 50%;
   transform: translateX(-50%);

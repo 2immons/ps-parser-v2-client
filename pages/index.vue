@@ -1,11 +1,13 @@
 <script setup lang="ts">
-
+import HelloWorld from '~/components/HelloWorld.vue'
 </script>
 
 <template>
-  $END$
+  <div>
+    <HelloWorld />
+  </div>
 </template>
 
 <style scoped>
-
+/* Стили для страницы можно добавить здесь */
 </style>

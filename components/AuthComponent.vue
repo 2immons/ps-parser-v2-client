@@ -3,7 +3,7 @@
 </script>
 
 <template>
-  $END$
+2
 </template>
 
 <style scoped>
