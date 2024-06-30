@@ -1,10 +1,17 @@
 <script setup lang="ts">
 import { computed } from 'vue';
+import { processesStore} from "~/store/processes";
+const store = processesStore();
+
+const downloadFile = (id: Number) => {
+  store.fetchDownloadFile(id);
+  // TODO: обработка скачивания файла
+}
 
 const props = defineProps<{
   processItem: {
     status: string,
-    number: string,
+    id: number,
     providers: string,
     categories: string,
     time: string
@@ -19,6 +26,8 @@ const statusButtonText = computed(() => {
       return 'В работе';
     case 'error':
       return 'Ошибка';
+    case 'in-queue':
+      return 'В очереди';
   }
 });
 
@@ -29,21 +38,24 @@ const statusButtonClass = computed(() => {
       'status-button--completed': props.processItem.status === 'completed',
       'status-button--pending': props.processItem.status === 'pending',
       'status-button--error': props.processItem.status === 'error',
+      'status-button--in-queue': props.processItem.status === 'in-queue',
     }
   ];
 });
 </script>
 
 <template>
-  <div class="container container--mobile">
     <div class="process-item">
       <div class="process-title">
         <div class="title-wrapper title-wrapper--number">
-          <h3 class="number">#{{ processItem.number }}</h3>
+          <h3 class="number">#{{ processItem.id }}</h3>
         </div>
         <div class="title-wrapper title-wrapper--status">
           <button :class="statusButtonClass">{{ statusButtonText }}</button>
         </div>
+      </div>
+      <div class="creation-date">
+        <span class="creation-date">Дата создания: 23.05.23 19:00</span>
       </div>
       <div class="process-info">
         <div class="info-section">
@@ -74,7 +86,9 @@ const statusButtonClass = computed(() => {
             </svg>
             Информация
           </button>
-          <button class="interaction-wrapper interaction-wrapper--download">
+          <button class="interaction-wrapper interaction-wrapper--download"
+                  @click="downloadFile(processItem.id)"
+                  v-if="processItem.status === 'completed'">
             <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M3.33337 16.9856C3.67063 17.315 4.12805 17.5 4.605 17.5H15.3951C15.872 17.5 16.3295 17.315 16.6667 16.9856M10.001 2.5V12.4521M10.001 12.4521L14.1116 8.64941M10.001 12.4521L5.89053 8.64941" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
@@ -89,7 +103,6 @@ const statusButtonClass = computed(() => {
         </div>
       </div>
     </div>
-  </div>
   <hr>
 </template>
 
@@ -106,6 +119,9 @@ const statusButtonClass = computed(() => {
 .title-wrapper{
   display: flex;
   align-items: center;
+}
+
+.creation-date{
 }
 
 .number {
@@ -139,6 +155,10 @@ const statusButtonClass = computed(() => {
 
 .status-button--error {
   background-color: #891919;
+}
+
+.status-button--in-queue {
+  background-color: #680f85;
 }
 
 .process-info{

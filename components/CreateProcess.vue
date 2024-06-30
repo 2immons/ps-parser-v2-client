@@ -32,8 +32,7 @@ const toastRef = ref<InstanceType<typeof ToastNotification>>();
       @create-process="triggerToast"
   />
   <div class="container container--mobile">
-    <div class="create-process-button-wrapper"
-      v-if="!isCreateProcessFormVisible">
+    <div class="create-process-button-wrapper">
       <button class="create-process-button"
         @click="toggleCreateProcessForm">
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">

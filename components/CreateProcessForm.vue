@@ -1,5 +1,8 @@
 <script setup>
 import { ref, defineEmits, watch } from 'vue';
+import { processesStore } from "~/store/processes.ts";
+
+const store = processesStore();
 
 import Treeselect from 'vue3-treeselect'
 import 'vue3-treeselect/dist/vue3-treeselect.css'
@@ -74,7 +77,16 @@ const cancelProcessCreation = () => {
 };
 
 const createProcess = () => {
-  alert(222)
+  let process = {
+    keyWordsArray: keyWordsArray.value,
+    categories: categories.value,
+    providers: providers.value,
+    minPrice: minPrice.value,
+    maxPrice: maxPrice.value,
+    minBonus: minBonus.value,
+    minSale: minSale.value
+  }
+  store.createProcess(process)
   isCreateProcessFormVisible2.value = false;
   setTimeout(() => {
     emits('create-process');
@@ -87,7 +99,7 @@ const createProcess = () => {
     <div class="create-process-form-bg" v-if="isCreateProcessFormVisible2">
       <div class="container container--mobile">
         <div class="create-process-form-wrapper">
-          <form>
+          <form @submit.prevent="createProcess">
             <label for="">Категории</label>
             <treeselect v-model="categories" :multiple="true" :options="categoriesSelects" />
 
@@ -109,8 +121,8 @@ const createProcess = () => {
             <label for="">Мин. % скидки</label>
             <input type="text" v-model="minSale">
 
-            <button @click="cancelProcessCreation">Закрыть</button>
-            <button @click="createProcess">Создать</button>
+            <button type="button" @click="cancelProcessCreation">Закрыть</button>
+            <button type="submit">Создать</button>
           </form>
         </div>
       </div>

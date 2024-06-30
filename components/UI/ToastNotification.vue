@@ -8,7 +8,6 @@ const props = defineProps({
 const visible = ref(false);
 
 const show = () => {
-  alert(2)
   visible.value = true;
   setTimeout(() => {
     visible.value = false;
