@@ -97,36 +97,48 @@ const createProcess = () => {
 <template>
   <Transition>
     <div class="create-process-form-bg" v-if="isCreateProcessFormVisible2">
-      <div class="container container--mobile">
         <div class="create-process-form-wrapper">
           <form @submit.prevent="createProcess">
-            <label for="">Категории</label>
-            <treeselect v-model="categories" :multiple="true" :options="categoriesSelects" />
+            <div class="input">
+              <label for="">Категории</label>
+              <treeselect v-model="categories" :multiple="true" :options="categoriesSelects" />
+            </div>
 
-            <label for="">Площадки</label>
-            <treeselect v-model="providers" :multiple="true" :options="providersSelects" />
+            <div class="input">
+              <label for="">Площадки</label>
+              <treeselect v-model="providers" :multiple="true" :options="providersSelects" />
+            </div>
 
-            <label for="">Ключевые слова</label>
-            <textarea placeholder="Введите ключевые слова через запятую" v-model="keyWordsString"></textarea>
+            <div class="input">
+              <label for="">Ключевые слова</label>
+              <textarea placeholder="Введите ключевые слова через запятую" v-model="keyWordsString"></textarea>
+            </div>
 
-            <label for="">Мин. цена</label>
-            <input type="text" v-model="minPrice">
+            <div class="short-input">
+              <label for="">Мин. цена</label>
+              <input type="text" v-model="minPrice">
+            </div>
 
-            <label for="">Макс. цена</label>
-            <input type="text" v-model="maxPrice">
+            <div class="short-input">
+              <label for="">Макс. цена</label>
+              <input type="text" v-model="maxPrice">
+            </div>
 
-            <label for="">Мин. % бонуса</label>
-            <input type="text" v-model="minBonus">
+            <div class="short-input">
+              <label for="">Мин. % бонуса</label>
+              <input type="text" v-model="minBonus">
+            </div>
 
-            <label for="">Мин. % скидки</label>
-            <input type="text" v-model="minSale">
+            <div class="short-input">
+              <label for="">Мин. % скидки</label>
+              <input type="text" v-model="minSale">
+            </div>
 
             <button type="button" @click="cancelProcessCreation">Закрыть</button>
             <button type="submit">Создать</button>
           </form>
         </div>
       </div>
-    </div>
   </Transition>
 </template>
 
@@ -141,6 +153,16 @@ const createProcess = () => {
 form {
   display: flex;
   flex-direction: column;
+  padding: 10px 0 10px 0;
+
+  .input {
+    margin: 5px 0 5px 0px;
+  }
+}
+
+.short-input {
+  display: grid;
+  grid-template-columns: 2fr 3fr;
 }
 
 .v-enter-active,
