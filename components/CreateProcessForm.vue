@@ -1,11 +1,24 @@
 <script setup>
-import { ref, defineEmits, watch } from 'vue';
+import {ref, defineEmits, watch, computed} from 'vue';
 import { processesStore } from "~/store/processes.ts";
-
-const store = processesStore();
-
+import { providersStore } from "~/store/providers.ts";
+import { categoriesStore } from "~/store/categories.ts";
 import Treeselect from 'vue3-treeselect'
 import 'vue3-treeselect/dist/vue3-treeselect.css'
+import '/styles/UI/input.less'
+import '/styles/UI/buttons.less'
+
+const processesStoreInstance = processesStore();
+const providersStoreInstance = providersStore();
+const categoriesStoreInstance = categoriesStore();
+
+const providersSelects = computed(() => {
+  return providersStoreInstance.providers
+})
+
+const categoriesSelects = computed(() => {
+  return categoriesStoreInstance.categories
+})
 
 const emits = defineEmits([
     "create-process",
@@ -35,40 +48,6 @@ let maxPrice = ref();
 let minBonus = ref();
 let minSale = ref();
 
-const categoriesSelects = ref([
-  {
-    id: 'TECH',
-    label: 'Технологии',
-    children: [ {
-      id: 'COMPUTER_MONITORS',
-      label: 'Компьютерные мониторы',
-    }, {
-      id: 'COMPUTER_MOUSES',
-      label: 'Компьютерные мыши',
-    } ],
-  }, {
-    id: 'SEX',
-    label: 'Секс',
-  }
-])
-
-const providersSelects = ref([
-  {
-    id: 'TECH',
-    label: 'Технологии',
-    children: [ {
-      id: 'COMPUTER_MONITORS',
-      label: 'Компьютерные мониторы',
-    }, {
-      id: 'COMPUTER_MOUSES',
-      label: 'Компьютерные мыши',
-    } ],
-  }, {
-    id: 'SEX',
-    label: 'Секс',
-  }
-])
-
 const cancelProcessCreation = () => {
   isCreateProcessFormVisible2.value = false;
   setTimeout(() => {
@@ -86,7 +65,7 @@ const createProcess = () => {
     minBonus: minBonus.value,
     minSale: minSale.value
   }
-  store.createProcess(process)
+  processesStoreInstance.createProcess(process)
   isCreateProcessFormVisible2.value = false;
   setTimeout(() => {
     emits('create-process');
@@ -96,46 +75,58 @@ const createProcess = () => {
 
 <template>
   <Transition>
-    <div class="create-process-form-bg" v-if="isCreateProcessFormVisible2">
-        <div class="create-process-form-wrapper">
+    <div class="create-process-form-bg" v-if="isCreateProcessFormVisible2" @click="cancelProcessCreation">
+        <div class="create-process-form-wrapper" @click.stop>
           <form @submit.prevent="createProcess">
             <div class="input">
               <label for="">Категории</label>
-              <treeselect v-model="categories" :multiple="true" :options="categoriesSelects" />
+              <Treeselect
+                  placeholder="Выберите категории..."
+                  noResultsText="Ничего не найдено"
+                  :multiple="true"
+                  :options="categoriesSelects"
+                  v-model="categories" />
             </div>
 
             <div class="input">
               <label for="">Площадки</label>
-              <treeselect v-model="providers" :multiple="true" :options="providersSelects" />
+              <Treeselect
+                  placeholder="Выберите площадки..."
+                  noResultsText="Ничего не найдено"
+                  :multiple="true"
+                  :options="providersSelects"
+                  v-model="providers" />
             </div>
 
-            <div class="input">
+            <div class="short-input">
               <label for="">Ключевые слова</label>
-              <textarea placeholder="Введите ключевые слова через запятую" v-model="keyWordsString"></textarea>
+              <textarea class="input-field" placeholder="Введите ключевые слова через запятую" v-model="keyWordsString"></textarea>
             </div>
 
             <div class="short-input">
               <label for="">Мин. цена</label>
-              <input type="text" v-model="minPrice">
+              <input class="input-field" type="number" v-model="minPrice">
             </div>
 
             <div class="short-input">
               <label for="">Макс. цена</label>
-              <input type="text" v-model="maxPrice">
+              <input class="input-field" type="number" v-model="maxPrice">
             </div>
 
             <div class="short-input">
               <label for="">Мин. % бонуса</label>
-              <input type="text" v-model="minBonus">
+              <input class="input-field" type="number" v-model="minBonus">
             </div>
 
             <div class="short-input">
               <label for="">Мин. % скидки</label>
-              <input type="text" v-model="minSale">
+              <input class="input-field" type="number" v-model="minSale">
             </div>
 
-            <button type="button" @click="cancelProcessCreation">Закрыть</button>
-            <button type="submit">Создать</button>
+            <div class="button-wrapper">
+              <button class="form-btn form-btn--close" type="button" @click="cancelProcessCreation">Закрыть</button>
+              <button class="form-btn form-btn--create" type="submit">Создать</button>
+            </div>
           </form>
         </div>
       </div>
@@ -145,24 +136,30 @@ const createProcess = () => {
 <style scoped>
 .create-process-form-bg {
   position: absolute;
-  background: white;
+  z-index: 3;
+  background: rgba(0, 0, 0, 0.32);
   overflow: hidden;
   height: 100%;
+  left: 0;
+}
+
+.create-process-form-wrapper {
+  z-index: 4;
+  background: white;
 }
 
 form {
   display: flex;
   flex-direction: column;
   padding: 10px 0 10px 0;
-
-  .input {
-    margin: 5px 0 5px 0px;
-  }
 }
 
-.short-input {
-  display: grid;
-  grid-template-columns: 2fr 3fr;
+.button-wrapper {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  margin: 10px 0 10px 0;
+
 }
 
 .v-enter-active,

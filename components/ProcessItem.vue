@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 import { processesStore} from "~/store/processes";
+import '/styles/UI/buttons.less'
 const store = processesStore();
 
 const downloadFile = (id: Number) => {
@@ -126,39 +127,6 @@ const statusButtonClass = computed(() => {
 
 .number {
   font-weight: bold;
-}
-
-.status-button {
-  /* Общие стили для кнопки */
-  padding: 10px;
-  border: none;
-  color: white;
-  cursor: pointer;
-  border-radius: 8px;
-  font-size: 14px;
-  height: 20px;
-  width: 100%;
-  text-transform: uppercase;
-  font-weight: bold;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.status-button--completed {
-  background-color: #17A952;
-}
-
-.status-button--pending {
-  background-color: #BF9321;
-}
-
-.status-button--error {
-  background-color: #891919;
-}
-
-.status-button--in-queue {
-  background-color: #680f85;
 }
 
 .process-info{

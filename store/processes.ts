@@ -4,13 +4,13 @@ import {ref} from "vue";
 import ProcessItem from "~/components/ProcessItem.vue";
 
 interface processItem {
-    keyWordsArray: String[],
-    categories: Number[],
-    providers: Number[],
-    minPrice: Number,
-    maxPrice: Number,
-    minBonus: Number,
-    minSale: Number,
+    keyWordsArray: string[],
+    categories: number[],
+    providers: number[],
+    minPrice: number,
+    maxPrice: number,
+    minBonus: number,
+    minSale: number,
 }
 
 interface ProcessItemForList {
@@ -46,7 +46,8 @@ export const processesStore = defineStore('processes', {
 
     actions: {
         createProcess(process: processItem) {
-            alert(process.minSale)
+            console.log("Новый процесс создан:")
+            console.log(process)
         },
 
         fetchDownloadFile(id: Number) {
